@@ -11,14 +11,14 @@
 using namespace std;
 
 HICON ghIcon;
-UINT stnid ;
-BOOL NotifyIconize(DWORD dwMessage, LPCWSTR pInfoTitle , LPCWSTR pInfo)
+
+BOOL NotifyIconize(UINT uID, DWORD dwMessage, LPCWSTR pInfoTitle , LPCWSTR pInfo)
 {
 	NOTIFYICONDATAW nid;
 	ZeroMemory(&nid,sizeof(nid));
 	nid.cbSize = sizeof(NOTIFYICONDATAW);
 	nid.hWnd = NULL;
-	nid.uID = stnid;
+	nid.uID = uID;
 	nid.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP | 0x00000010;
 	nid.dwInfoFlags      = 0x00000001;
 	nid.uTimeout         = 300;
@@ -117,6 +117,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	wstring title;
 	wstring iconexe;
 	int iconindex=0;
+	UINT uTrayID=WM_APP+1;
+
 	LPCSTR pTitleOption = "/title:";
 	size_t nTitleOption = strlen(pTitleOption);
 	
@@ -149,7 +151,6 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	}
 
 	CoInitialize(NULL);
-	stnid = 1234;//GetTickCount();
 
 	if(!iconexe.empty())
 	{
@@ -192,22 +193,23 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		MessageBoxW(NULL, L"balloon sendmessage",NULL,MB_ICONERROR);
 		return __LINE__;
 	}
-	NotifyIconize(NIM_DELETE, NULL, NULL);
-	if(!NotifyIconize(NIM_ADD, NULL, NULL))
+
+	NotifyIconize(uTrayID,NIM_DELETE, NULL, NULL);
+	if(!NotifyIconize(uTrayID,NIM_ADD, NULL, NULL))
 	{
-		//MessageBox(NULL, _T("NotifyAdd"),NULL,MB_ICONERROR);
-		//return __LINE__;
+		MessageBoxA(NULL, "NotifyAdd",NULL,MB_ICONERROR);
+		return __LINE__;
 	}
 
 
 
-	if(!NotifyIconize(NIM_MODIFY, title.c_str(), text.c_str() ))
+	if(!NotifyIconize(uTrayID, NIM_MODIFY, title.c_str(), text.c_str() ))
 	{
-		// MessageBox(NULL, _T("NotifyModify"),NULL,MB_ICONERROR);
-		// return __LINE__;
+		MessageBoxA(NULL, "NotifyModify",NULL,MB_ICONERROR);
+		return __LINE__;
 	}
 	Sleep(5000);
-	NotifyIconize(NIM_DELETE, NULL, NULL);
+	NotifyIconize(uTrayID, NIM_DELETE, NULL, NULL);
 	DestroyWindow(hBalloon);
 	DestroyIcon(ghIcon);
 	return 0;
