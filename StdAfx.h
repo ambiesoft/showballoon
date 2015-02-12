@@ -16,6 +16,7 @@
 #include <Objbase.h>
 
 #include <string>
+using namespace std;
 
 #include <time.h>
 
