@@ -65,12 +65,12 @@ int APIENTRY WinMain(HINSTANCE hInstance,
                      LPTSTR     lpCmdLine,
                      int       nCmdShow )
 {
-	
+	// /title:"My Title" /duration:10000 "Hello World!"
 	if(__argc < 2)
 	{
 		wstring message;
 		message += NS(L"Usage:\r\n");
-		message += NS(L"showballoon.exe [/title:STRING] [/icon:EXE or DLL for ICON] [/iconindex:i] STRING");
+		message += NS(L"showballoon.exe [/title:STRING] [/icon:EXE or DLL for ICON] [/iconindex:i] [/duration:MILLISEC] STRING");
 		message += L"\r\n";
 		message += L"\r\n";
 		message += L"STRING:\tUTF8 url encoded string";
@@ -87,6 +87,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	wstring title;
 	wstring iconexe;
 	int iconindex=0;
+	int duration=5000;
 	UINT uTrayID=WM_APP+1;
 
 	LPCSTR pTitleOption = "/title:";
@@ -97,6 +98,9 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
 	LPCSTR pIconIndexOption = "/iconindex:";
 	size_t nIconIndexOption = strlen(pIconIndexOption);
+
+	LPCSTR pDurationOption = "/duration:";
+	size_t nDurationOption = strlen(pDurationOption);
 	for(int i=1 ; i < __argc ; ++i)
 	{
 		if(0== strnicmp(__argv[i], pTitleOption, nTitleOption))
@@ -114,6 +118,11 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 			char* pS = __argv[i] + nIconIndexOption;
 			iconindex = atoi(pS);
 		}
+		else if(0== strnicmp(__argv[i], pDurationOption, nDurationOption))
+		{
+			char* pS = __argv[i] + nDurationOption;
+			duration = atoi(pS);
+		}
 		else
 		{
 			text = argToWstring(__argv[i]);
@@ -122,15 +131,18 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
 	
 	SHFILEINFOW sfi={0};
-	SHGetFileInfoW(iconexe.c_str(),
-				   0,
-				   &sfi, 
-				   sizeof(SHFILEINFO), 
-				   // SHGFI_SYSICONINDEX|
-				   SHGFI_ICON|
-				   SHGFI_SMALLICON);
+	if(!iconexe.empty())
+	{
+		SHGetFileInfoW(iconexe.c_str(),
+					   0,
+					   &sfi, 
+					   sizeof(SHFILEINFO), 
+					   // SHGFI_SYSICONINDEX|
+					   SHGFI_ICON|
+					   SHGFI_SMALLICON);
+	}
 
-	showballoon(NULL,title,text,sfi.hIcon,uTrayID);
+	showballoon(NULL,title,text,sfi.hIcon, duration, uTrayID);
 	DestroyIcon(sfi.hIcon);
 	return 0;
 }
