@@ -70,7 +70,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	{
 		wstring message;
 		message += NS(L"Usage:\r\n");
-		message += NS(L"showballoon.exe [/title:STRING] [/icon:EXE or DLL for ICON] [/iconindex:i] [/duration:MILLISEC] STRING");
+		message += NS(L"showballoon.exe [/title:STRING] [/icon:EXE or DLL for ICON] [/iconindex:i] [/duration:MILLISEC] [/waitpid:PID] STRING");
 		message += L"\r\n";
 		message += L"\r\n";
 		message += L"STRING:\tUTF8 url encoded string";
