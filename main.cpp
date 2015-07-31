@@ -88,6 +88,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	wstring iconexe;
 	int iconindex=0;
 	int duration=5000;
+	int waitpid=0;
 	UINT uTrayID=WM_APP+1;
 
 	LPCSTR pTitleOption = "/title:";
@@ -101,6 +102,9 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
 	LPCSTR pDurationOption = "/duration:";
 	size_t nDurationOption = strlen(pDurationOption);
+
+	LPCSTR pWaitpidOption = "/waitpid:";
+	size_t nWaitpidOption = strlen(pWaitpidOption);
 	for(int i=1 ; i < __argc ; ++i)
 	{
 		if(0== strnicmp(__argv[i], pTitleOption, nTitleOption))
@@ -123,13 +127,26 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 			char* pS = __argv[i] + nDurationOption;
 			duration = atoi(pS);
 		}
+		else if(0== strnicmp(__argv[i], pWaitpidOption, nWaitpidOption))
+		{
+			char* pS = __argv[i] + nWaitpidOption;
+			waitpid = atoi(pS);
+		}
+
+
 		else
 		{
 			text = argToWstring(__argv[i]);
 		}
 	}
 
-	
+	if(waitpid!=0)
+	{
+		HANDLE ph = OpenProcess(SYNCHRONIZE, FALSE, waitpid);
+		if(ph)
+			WaitForSingleObject(ph,INFINITE);
+	}
+
 	SHFILEINFOW sfi={0};
 	if(!iconexe.empty())
 	{
