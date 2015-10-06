@@ -9,11 +9,12 @@
 #endif // _MSC_VER > 1000
 
 #define WIN32_LEAN_AND_MEAN		// Windows
-#include <checkaccess.h>
+// #include <checkaccess.h>
 #include <windows.h>
 #include <commctrl.h>
 #include <shellapi.h>
 #include <Objbase.h>
+#include <tchar.h>
 
 #include <string>
 using namespace std;
