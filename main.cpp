@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "../MyUtility/UTF16toUTF8.h"
 #include "../MyUtility/showballoon.h"
+#include "../MyUtility/stdwin32/stdwin32.h"
+using namespace stdwin32;
 
 
 
@@ -70,7 +72,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	{
 		wstring message;
 		message += NS(L"Usage:\r\n");
-		message += NS(L"showballoon.exe [/title:STRING] [/icon:EXE or DLL for ICON] [/iconindex:i] [/duration:MILLISEC] [/waitpid:PID] STRING");
+		message += NS(L"showballoon.exe [/title:STRING] [[/icon:[EXE|DLL|ICON]] [/iconindex:i]|[/defaulticon]] [/duration:MILLISEC] [/waitpid:PID] STRING");
 		message += L"\r\n";
 		message += L"\r\n";
 		message += L"STRING:\tUTF8 url encoded string";
@@ -87,6 +89,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	wstring title;
 	wstring iconexe;
 	int iconindex=0;
+	bool defaulticon = false;
 	int duration=5000;
 	int waitpid=0;
 	UINT uTrayID=WM_APP+1;
@@ -100,6 +103,10 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	LPCSTR pIconIndexOption = "/iconindex:";
 	size_t nIconIndexOption = strlen(pIconIndexOption);
 
+	LPCSTR pDefaultIconOption = "/defaulticon:";
+	size_t nDefaultIconOption = strlen(pIconIndexOption);
+
+	
 	LPCSTR pDurationOption = "/duration:";
 	size_t nDurationOption = strlen(pDurationOption);
 
@@ -121,6 +128,10 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		{
 			char* pS = __argv[i] + nIconIndexOption;
 			iconindex = atoi(pS);
+		}
+		else if(0== strnicmp(__argv[i], pDefaultIconOption, nDefaultIconOption))
+		{
+			defaulticon = true;
 		}
 		else if(0== strnicmp(__argv[i], pDurationOption, nDurationOption))
 		{
@@ -147,6 +158,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 			WaitForSingleObject(ph,INFINITE);
 	}
 
+	HICON hIcon = NULL;
 	SHFILEINFOW sfi={0};
 	if(!iconexe.empty())
 	{
@@ -157,9 +169,25 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 					   // SHGFI_SYSICONINDEX|
 					   SHGFI_ICON|
 					   SHGFI_SMALLICON);
+		hIcon = sfi.hIcon;
+	}
+	else if(defaulticon)
+	{
+		wstring thisexe = stdGetModuleFileNameW();
+		SHGetFileInfoW(thisexe.c_str(),
+					   0,
+					   &sfi, 
+					   sizeof(SHFILEINFO), 
+					   // SHGFI_SYSICONINDEX|
+					   SHGFI_ICON|
+					   SHGFI_SMALLICON);
+
+		hIcon = sfi.hIcon;
 	}
 
 	showballoon(NULL,title,text,sfi.hIcon, duration, uTrayID);
-	DestroyIcon(sfi.hIcon);
+	
+	if(hIcon)
+		DestroyIcon(hIcon);
 	return 0;
 }
