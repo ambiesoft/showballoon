@@ -72,12 +72,14 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	{
 		wstring message;
 		message += NS(L"Usage:\r\n");
-		message += NS(L"showballoon.exe [/title:STRING] [[/icon:[EXE|DLL|ICON]] [/iconindex:i]|[/defaulticon]] [/duration:MILLISEC] [/waitpid:PID] STRING");
+		message += NS(L"showballoon.exe [/title:STRING] [[/icon:[EXE|DLL|ICON]] [/iconindex:i]|[/defaulticon]] [/duration:MILLISEC] [/waitpid:PID] [/balloonicon:BII] STRING");
 		message += L"\r\n";
 		message += L"\r\n";
 		message += L"STRING:\tUTF8 url encoded string";
 		message += L"\r\n";
 		message += L"RESOURCEFORICON:\tExe or Dll for finding icon";
+		message += L"\r\n";
+		message += L"BII:0=None, 1=Info, 2=Warning, 3=Error, (Default=1)";
 		MessageBoxW(NULL, 
 			message.c_str(),
 			L"showballoon",
@@ -93,6 +95,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	int duration=5000;
 	int waitpid=0;
 	UINT uTrayID=WM_APP+1;
+	DWORD dwBalloonIcon=1;
 
 	LPCSTR pTitleOption = "/title:";
 	size_t nTitleOption = strlen(pTitleOption);
@@ -112,6 +115,10 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
 	LPCSTR pWaitpidOption = "/waitpid:";
 	size_t nWaitpidOption = strlen(pWaitpidOption);
+
+	LPCSTR pBalloonIconOption = "/balloonicon:";
+	size_t nBalloonIconOption = strlen(pBalloonIconOption);
+
 	for(int i=1 ; i < __argc ; ++i)
 	{
 		if(0== strnicmp(__argv[i], pTitleOption, nTitleOption))
@@ -142,6 +149,11 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		{
 			char* pS = __argv[i] + nWaitpidOption;
 			waitpid = atoi(pS);
+		}
+		else if(0== strnicmp(__argv[i], pBalloonIconOption, nBalloonIconOption))
+		{
+			char* pS = __argv[i] + nBalloonIconOption;
+			dwBalloonIcon = atoi(pS);
 		}
 
 
