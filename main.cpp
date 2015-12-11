@@ -67,7 +67,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
                      LPTSTR     lpCmdLine,
                      int       nCmdShow )
 {
-	// /title:"My Title" /duration:10000 "Hello World!"
+	// /title:"My Title" /duration:10000 "Hello World!" /balloonicon:3
 	if(__argc < 2)
 	{
 		wstring message;
@@ -95,7 +95,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	int duration=5000;
 	int waitpid=0;
 	UINT uTrayID=WM_APP+1;
-	DWORD dwBalloonIcon=1;
+	DWORD dwBalloonIcon=NIIF_NONE;
 
 	LPCSTR pTitleOption = "/title:";
 	size_t nTitleOption = strlen(pTitleOption);
@@ -197,7 +197,15 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		hIcon = sfi.hIcon;
 	}
 
-	showballoon(NULL,title,text,sfi.hIcon, duration, uTrayID);
+	showballoon(
+		NULL,
+		title,
+		text,
+		sfi.hIcon,
+		duration, 
+		uTrayID,
+		FALSE,
+		dwBalloonIcon);
 	
 	if(hIcon)
 		DestroyIcon(hIcon);
