@@ -82,7 +82,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		message += L"BII:0=None, 1=Info, 2=Warning, 3=Error, (Default=1)";
 		MessageBoxW(NULL, 
 			message.c_str(),
-			L"showballoon 1.00",
+			L"showballoon 1.01",
 			MB_ICONINFORMATION);
 		return 1;
 	}
@@ -170,21 +170,36 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 			WaitForSingleObject(ph,INFINITE);
 	}
 
+
 	HICON hIcon = NULL;
-	SHFILEINFOW sfi={0};
 	if(!iconexe.empty())
 	{
-		SHGetFileInfoW(iconexe.c_str(),
-					   0,
-					   &sfi, 
-					   sizeof(SHFILEINFO), 
-					   // SHGFI_SYSICONINDEX|
-					   SHGFI_ICON|
-					   SHGFI_SMALLICON);
-		hIcon = sfi.hIcon;
+		
+		SHFILEINFOW sfi={0};
+//		SHGetFileInfoW(iconexe.c_str(),
+//					   0,
+//					   &sfi, 
+//					   sizeof(SHFILEINFO), 
+//					   // SHGFI_SYSICONINDEX|
+//					   SHGFI_ICON|
+//					   SHGFI_SMALLICON);
+//		hIcon = sfi.hIcon;
+
+
+//		ExtractIconExW(
+//			iconexe.c_str(),
+//			iconindex,
+//			NULL,
+//			&hIcon,
+//			1);
+
+		hIcon = ExtractIconW(hInstance,
+			iconexe.c_str(),
+			iconindex);
 	}
 	else if(defaulticon)
 	{
+		SHFILEINFOW sfi={0};
 		wstring thisexe = stdGetModuleFileNameW();
 		SHGetFileInfoW(thisexe.c_str(),
 					   0,
@@ -201,7 +216,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		NULL,
 		title,
 		text,
-		sfi.hIcon,
+		hIcon,
 		duration, 
 		uTrayID,
 		FALSE,
