@@ -175,7 +175,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	if(!iconexe.empty())
 	{
 		
-		SHFILEINFOW sfi={0};
+//		SHFILEINFOW sfi={0};
 //		SHGetFileInfoW(iconexe.c_str(),
 //					   0,
 //					   &sfi, 
