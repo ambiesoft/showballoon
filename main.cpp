@@ -1,9 +1,14 @@
 #include "stdafx.h"
-#include "../MyUtility/UTF16toUTF8.h"
-#include "../MyUtility/showballoon.h"
-#include "../MyUtility/stdwin32/stdwin32.h"
-using namespace stdwin32;
 
+#include <stlsoft/smartptr/scoped_handle.hpp>
+
+#include "../lsMisc/UTF16toUTF8.h"
+#include "../lsMisc/showballoon.h"
+#include "../lsMisc/CommandLineString.h"
+#include "../lsMisc/stdwin32/stdwin32.h"
+
+using namespace stdwin32;
+using namespace Ambiesoft;
 
 
 char a2c1(char c1)
@@ -62,7 +67,9 @@ wstring argToWstring(const char* p)
 	return ret;
 }
 
-int APIENTRY WinMain(HINSTANCE hInstance,
+
+
+int APIENTRY _tWinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
                      LPTSTR     lpCmdLine,
                      int       nCmdShow )
@@ -119,47 +126,51 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	LPCSTR pBalloonIconOption = "/balloonicon:";
 	size_t nBalloonIconOption = strlen(pBalloonIconOption);
 
-	for(int i=1 ; i < __argc ; ++i)
+
+	int argc = 0;
+	LPSTR* argv = CCommandLineStringBase<char>::getCommandLine(GetCommandLineA(), &argc);
+	stlsoft::scoped_handle<LPSTR*> myfreev(argv, CCommandLineStringBase<char>::freeCommandLine);
+	for(int i=1 ; i < argc ; ++i)
 	{
-		if(0== strnicmp(__argv[i], pTitleOption, nTitleOption))
+		if(0== strnicmp(argv[i], pTitleOption, nTitleOption))
 		{
-			char* pS = __argv[i] + nTitleOption;
+			char* pS = argv[i] + nTitleOption;
 			title=argToWstring(pS);
 		}
-		else if(0== strnicmp(__argv[i], pIconOption, nIconOption))
+		else if(0== strnicmp(argv[i], pIconOption, nIconOption))
 		{
-			char* pS = __argv[i] + nIconOption;
+			char* pS = argv[i] + nIconOption;
 			iconexe=argToWstring(pS);
 		}
-		else if(0== strnicmp(__argv[i], pIconIndexOption, nIconIndexOption))
+		else if(0== strnicmp(argv[i], pIconIndexOption, nIconIndexOption))
 		{
-			char* pS = __argv[i] + nIconIndexOption;
+			char* pS = argv[i] + nIconIndexOption;
 			iconindex = atoi(pS);
 		}
-		else if(0== strnicmp(__argv[i], pDefaultIconOption, nDefaultIconOption))
+		else if(0== strnicmp(argv[i], pDefaultIconOption, nDefaultIconOption))
 		{
 			defaulticon = true;
 		}
-		else if(0== strnicmp(__argv[i], pDurationOption, nDurationOption))
+		else if(0== strnicmp(argv[i], pDurationOption, nDurationOption))
 		{
-			char* pS = __argv[i] + nDurationOption;
+			char* pS = argv[i] + nDurationOption;
 			duration = atoi(pS);
 		}
-		else if(0== strnicmp(__argv[i], pWaitpidOption, nWaitpidOption))
+		else if(0== strnicmp(argv[i], pWaitpidOption, nWaitpidOption))
 		{
-			char* pS = __argv[i] + nWaitpidOption;
+			char* pS = argv[i] + nWaitpidOption;
 			waitpid = atoi(pS);
 		}
-		else if(0== strnicmp(__argv[i], pBalloonIconOption, nBalloonIconOption))
+		else if(0== strnicmp(argv[i], pBalloonIconOption, nBalloonIconOption))
 		{
-			char* pS = __argv[i] + nBalloonIconOption;
+			char* pS = argv[i] + nBalloonIconOption;
 			dwBalloonIcon = atoi(pS);
 		}
 
 
 		else
 		{
-			text = argToWstring(__argv[i]);
+			text = argToWstring(argv[i]);
 		}
 	}
 

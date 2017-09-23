@@ -23,6 +23,8 @@ using namespace std;
 
 #define NS(s) (s)
 
+#pragma warning(disable: 4786)
+
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++
 
