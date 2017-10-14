@@ -89,7 +89,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		message += L"BII:0=None, 1=Info, 2=Warning, 3=Error, (Default=1)";
 		MessageBoxW(NULL, 
 			message.c_str(),
-			L"showballoon 1.01",
+			L"showballoon 1.02",
 			MB_ICONINFORMATION);
 		return 1;
 	}
@@ -132,36 +132,36 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	stlsoft::scoped_handle<LPSTR*> myfreev(argv, CCommandLineStringBase<char>::freeCommandLine);
 	for(int i=1 ; i < argc ; ++i)
 	{
-		if(0== strnicmp(argv[i], pTitleOption, nTitleOption))
+		if(0== _strnicmp(argv[i], pTitleOption, nTitleOption))
 		{
 			char* pS = argv[i] + nTitleOption;
 			title=argToWstring(pS);
 		}
-		else if(0== strnicmp(argv[i], pIconOption, nIconOption))
+		else if(0== _strnicmp(argv[i], pIconOption, nIconOption))
 		{
 			char* pS = argv[i] + nIconOption;
 			iconexe=argToWstring(pS);
 		}
-		else if(0== strnicmp(argv[i], pIconIndexOption, nIconIndexOption))
+		else if(0== _strnicmp(argv[i], pIconIndexOption, nIconIndexOption))
 		{
 			char* pS = argv[i] + nIconIndexOption;
 			iconindex = atoi(pS);
 		}
-		else if(0== strnicmp(argv[i], pDefaultIconOption, nDefaultIconOption))
+		else if(0== _strnicmp(argv[i], pDefaultIconOption, nDefaultIconOption))
 		{
 			defaulticon = true;
 		}
-		else if(0== strnicmp(argv[i], pDurationOption, nDurationOption))
+		else if(0== _strnicmp(argv[i], pDurationOption, nDurationOption))
 		{
 			char* pS = argv[i] + nDurationOption;
 			duration = atoi(pS);
 		}
-		else if(0== strnicmp(argv[i], pWaitpidOption, nWaitpidOption))
+		else if(0== _strnicmp(argv[i], pWaitpidOption, nWaitpidOption))
 		{
 			char* pS = argv[i] + nWaitpidOption;
 			waitpid = atoi(pS);
 		}
-		else if(0== strnicmp(argv[i], pBalloonIconOption, nBalloonIconOption))
+		else if(0== _strnicmp(argv[i], pBalloonIconOption, nBalloonIconOption))
 		{
 			char* pS = argv[i] + nBalloonIconOption;
 			dwBalloonIcon = atoi(pS);

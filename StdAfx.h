@@ -9,7 +9,9 @@
 #endif // _MSC_VER > 1000
 
 #define WIN32_LEAN_AND_MEAN		// Windows
+#if _MSC_VER < 1500
 #include <checkaccess.h>
+#endif
 #include <windows.h>
 #include <commctrl.h>
 #include <shellapi.h>
