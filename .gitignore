@@ -2,6 +2,7 @@
 *.suo
 *.user
 
+build/
 Debug/
 Release/
 showballoon.ncb
