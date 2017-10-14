@@ -9,6 +9,9 @@
 #endif // _MSC_VER > 1000
 
 #define WIN32_LEAN_AND_MEAN		// Windows
+
+#include "target.h"
+
 #if _MSC_VER < 1500
 #include <checkaccess.h>
 #endif

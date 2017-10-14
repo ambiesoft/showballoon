@@ -93,7 +93,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		message += L"BII:0=None, 1=Info, 2=Warning, 3=Error, (Default=1)";
 		MessageBoxW(NULL, 
 			message.c_str(),
-			L"showballoon 1.02",
+			L"showballoon 1.03",
 			MB_ICONINFORMATION);
 		return 1;
 	}
