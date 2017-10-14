@@ -1,5 +1,9 @@
 #include "stdafx.h"
 
+#include <CommCtrl.h>
+#pragma comment(lib,"comctl32.lib")
+#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
+
 #include <stlsoft/smartptr/scoped_handle.hpp>
 
 #include "../lsMisc/UTF16toUTF8.h"
@@ -101,7 +105,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	bool defaulticon = false;
 	int duration=5000;
 	int waitpid=0;
-	UINT uTrayID=WM_APP+1;
+	UINT uTrayID=GetTickCount();
 	DWORD dwBalloonIcon=NIIF_NONE;
 
 	LPCSTR pTitleOption = "/title:";

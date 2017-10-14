@@ -1,6 +1,7 @@
 *.ncb
 *.suo
 *.user
+*.sdf
 
 build/
 Debug/
