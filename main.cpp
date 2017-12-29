@@ -83,17 +83,25 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	{
 		wstring message;
 		message += NS(L"Usage:\r\n");
-		message += NS(L"showballoon.exe [/title:STRING] [[/icon:[EXE|DLL|ICON]] [/iconindex:i]|[/defaulticon]] [/duration:MILLISEC] [/waitpid:PID] [/balloonicon:BII] STRING");
+		message += NS(L"showballoon.exe [/title:STRING] [/icon:[EXE|DLL|ICON]] [/iconindex:i | /defaulticon] [/duration:MILLISEC] [/waitpid:PID] [/balloonicon:BII] STRING");
 		message += L"\r\n";
 		message += L"\r\n";
-		message += L"STRING:\tUTF8 url encoded string";
+		message += L"STRING:";
 		message += L"\r\n";
-		message += L"RESOURCEFORICON:\tExe or Dll for finding icon";
+		message += L"  UTF8 url encoded string";
 		message += L"\r\n";
-		message += L"BII:0=None, 1=Info, 2=Warning, 3=Error, (Default=1)";
-		MessageBoxW(NULL, 
+		message += L"\r\n";
+		message += L"RESOURCEFORICON:";
+		message += L"\r\n";
+		message += L"  Exe or Dll for finding icon";
+		message += L"\r\n";
+		message += L"\r\n";
+		message += L"BII:";
+		message += L"\r\n";
+		message += L"  0=None, 1=Info, 2=Warning, 3=Error";
+		MessageBoxW(NULL,
 			message.c_str(),
-			L"showballoon 1.03",
+			L"showballoon 1.04",
 			MB_ICONINFORMATION);
 		return 1;
 	}
