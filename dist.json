@@ -14,10 +14,9 @@
         "Copying.txt",
         "History.txt",
         "README.md",
-        "showballoon.exe",
-        "showballoonTest.exe"
+        "showballoon.exe"
     ],
-    "TotalFileCount": 5,
+    "TotalFileCount": 4,
     "archivedir": "C:\\Linkout",
     "remotedir": "http://ambiesoft.fam.cx/ffdav/uploads/showballoon/",
     "remotesha1": "http://ambiesoft.fam.cx/ffdav/uploads/getSha1.php?file=showballoon/{}",
