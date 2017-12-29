@@ -1,0 +1,28 @@
+{
+    "name": "showballoon",
+    "solution": "showballoon2013.sln",
+    "targetproject": "showballoon",
+    "configuration": "Release",
+    "targets": [
+        {
+            "setoutdirforbuild": true,
+            "platform": "Win32",
+            "outdir": "c:\\Linkout\\showballoon"
+        }
+    ],
+    "ShouldBeFiles": [
+        "Copying.txt",
+        "History.txt",
+        "README.md",
+        "showballoon.exe",
+        "showballoonTest.exe"
+    ],
+    "TotalFileCount": 5,
+    "archivedir": "C:\\Linkout",
+    "remotedir": "http://ambiesoft.fam.cx/ffdav/uploads/showballoon/",
+    "remotesha1": "http://ambiesoft.fam.cx/ffdav/uploads/getSha1.php?file=showballoon/{}",
+    "ShouldNotBeFiles": [],
+    "ShouldBeOneOfThem": [],
+    "obtainverfrom": "history.txt",
+    "obtainverregex": "\\d+\\.\\d+"
+}

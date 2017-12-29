@@ -90,6 +90,8 @@
     <PostBuildEvent>
       <Command>copy "$(ProjectDir)History.txt" "$(TargetDir)"
 copy "$(ProjectDir)Copying.txt" "$(TargetDir)"
+copy "$(ProjectDir)README.md" "$(TargetDir)"
+
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -136,6 +138,8 @@ copy "$(ProjectDir)Copying.txt" "$(TargetDir)"
     <PostBuildEvent>
       <Command>copy "$(ProjectDir)History.txt" "$(TargetDir)"
 copy "$(ProjectDir)Copying.txt" "$(TargetDir)"
+copy "$(ProjectDir)README.md" "$(TargetDir)"
+
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -197,6 +201,7 @@ copy "$(ProjectDir)Copying.txt" "$(TargetDir)"
     <None Include="icon_mai.ico" />
     <None Include="Copying.txt" />
     <None Include="History.txt" />
+    <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

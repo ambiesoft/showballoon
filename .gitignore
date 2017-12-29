@@ -3,6 +3,7 @@
 *.user
 *.sdf
 
+ipch/
 build/
 Debug/
 Release/
