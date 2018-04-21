@@ -125,7 +125,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		message += L"  0=None, 1=Info, 2=Warning, 3=Error";
 		message += L"\r\n";
 		message += L"\r\n";
-		message += L"Visit https://github.com/erasoni/showballoon for more information.";
+		message += L"Visit https://github.com/ambiesoft/showballoon for more information.";
 		MessageBoxW(NULL,
 			message.c_str(),
 			L"showballoon 1.04",
@@ -167,8 +167,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 
 	int argc = 0;
-	LPSTR* argv = CCommandLineStringBase<char>::getCommandLine(GetCommandLineA(), &argc);
-	stlsoft::scoped_handle<LPSTR*> myfreev(argv, CCommandLineStringBase<char>::freeCommandLine);
+	LPSTR* argv = CCommandLineStringBase<char>::getCommandLineArg(GetCommandLineA(), &argc);
+	stlsoft::scoped_handle<LPSTR*> myfreev(argv, CCommandLineStringBase<char>::freeCommandLineArg);
 	for(int i=1 ; i < argc ; ++i)
 	{
 		if(0== _strnicmp(argv[i], pTitleOption, nTitleOption))
