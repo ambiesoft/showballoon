@@ -31,14 +31,14 @@
 #include "../lsMisc/UTF16toUTF8.h"
 #include "../lsMisc/showballoon.h"
 #include "../lsMisc/CommandLineString.h"
-#include "../lsMisc/stdwin32/stdwin32.h"
 #include "../lsMisc/stdosd/stdosd.h"
 
-using namespace Ambiesoft::stdwin32;
 using namespace Ambiesoft::stdosd;
 using namespace Ambiesoft;
 using namespace std;
 
+#define APPNAME L"showballoon"
+#define APPVERSION L"1.5.1"
 
 char a2c1(char c1)
 {
@@ -91,7 +91,7 @@ wstring argToWstring(const char* p)
 			org+=*p;
 		}
 	}
-	return toStdWstringFromUtf8(org);
+	return stdRemoveDoubleQuote(toStdWstringFromUtf8(org));
 	//wstring ret;
 	//UTF8toUTF16((const LPBYTE)org.c_str(),ret);
 	//return ret;
@@ -130,7 +130,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		message += L"Visit https://github.com/ambiesoft/showballoon for more information.";
 		MessageBoxW(NULL,
 			message.c_str(),
-			L"showballoon 1.04",
+			APPNAME L" v" APPVERSION,
 			MB_ICONINFORMATION);
 		return 1;
 	}

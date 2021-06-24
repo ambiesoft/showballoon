@@ -1,3 +1,6 @@
+2021/06/24 ver1.5.1
+Move to vs2019
+
 2017/12/29 ver1.04
 Start to use VS 2013
 
