@@ -31,13 +31,16 @@
 
 #include "../../lsMisc/OpenCommon.h"
 #include "../../lsMisc/stdwin32/stdwin32.h"
+#include "../../lsMisc/stdosd/stdosd.h"
 
 #pragma comment(lib,"user32.lib")
 #pragma comment(lib,"shlwapi.lib")
 
 using namespace std;
 using namespace Ambiesoft;
-using namespace stdwin32;
+using namespace Ambiesoft::stdosd;
+using namespace Ambiesoft::stdwin32;
+
 
 TCHAR szSB[MAX_PATH];
 void testit(LPCTSTR pCommand)
@@ -65,7 +68,7 @@ int main()
 	testit(command.c_str());
 	
 
-	command=string_format(_T("/title:%s /icon:%s /defaulticon /balloonicon:%d /duration:%d %s"),
+	command=stdFormat(_T("/title:%s /icon:%s /defaulticon /balloonicon:%d /duration:%d %s"),
 		_T("%E3%82%82%E3%82%89%E3%81%84%E6%B3%A3%E3%81%8D"), //title
 		(wstring(_T("\"") + wstring(szSB) + _T("\""))).c_str(), // icon
 		1, // balloonicon
@@ -75,7 +78,7 @@ int main()
 	testit(command.c_str());
 
 
-	command=string_format(_T("/title:%s /icon:%s /defaulticon /balloonicon:%d /duration:%d %s"),
+	command= stdFormat(_T("/title:%s /icon:%s /defaulticon /balloonicon:%d /duration:%d %s"),
 		_T("%EC%98%81%EC%96%B4"), //title
 		(wstring(_T("\"") + wstring(szSB) + _T("\""))).c_str(), // icon
 		1, // balloonicon

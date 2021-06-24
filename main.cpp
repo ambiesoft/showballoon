@@ -28,15 +28,16 @@
 #pragma comment(lib,"comctl32.lib")
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 
-#include <stlsoft/smartptr/scoped_handle.hpp>
-
 #include "../lsMisc/UTF16toUTF8.h"
 #include "../lsMisc/showballoon.h"
 #include "../lsMisc/CommandLineString.h"
 #include "../lsMisc/stdwin32/stdwin32.h"
+#include "../lsMisc/stdosd/stdosd.h"
 
-using namespace stdwin32;
+using namespace Ambiesoft::stdwin32;
+using namespace Ambiesoft::stdosd;
 using namespace Ambiesoft;
+using namespace std;
 
 
 char a2c1(char c1)
@@ -90,9 +91,10 @@ wstring argToWstring(const char* p)
 			org+=*p;
 		}
 	}
-	wstring ret;
-	UTF8toUTF16((const LPBYTE)org.c_str(),ret);
-	return ret;
+	return toStdWstringFromUtf8(org);
+	//wstring ret;
+	//UTF8toUTF16((const LPBYTE)org.c_str(),ret);
+	//return ret;
 }
 
 
@@ -167,8 +169,12 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 
 	int argc = 0;
-	LPSTR* argv = CCommandLineStringBase<char>::getCommandLineArg(GetCommandLineA(), &argc);
-	stlsoft::scoped_handle<LPSTR*> myfreev(argv, CCommandLineStringBase<char>::freeCommandLineArg);
+	// LPSTR* argv = CCommandLineStringBase<char>::getCommandLineArg(GetCommandLineA(), &argc);
+	// stlsoft::scoped_handle<LPSTR*> myfreev(argv, CCommandLineStringBase<char>::freeCommandLineArg);
+	unique_ptr<LPSTR, function<void(LPSTR*)>> argvptr(
+		CCommandLineStringBase<char>::getCommandLineArg(GetCommandLineA(), &argc),
+		function<void(LPSTR*)>(CCommandLineStringBase<char>::freeCommandLineArg));
+	LPSTR* argv = argvptr.get();
 	for(int i=1 ; i < argc ; ++i)
 	{
 		if(0== _strnicmp(argv[i], pTitleOption, nTitleOption))
@@ -250,7 +256,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	else if(defaulticon)
 	{
 		SHFILEINFOW sfi={0};
-		wstring thisexe = stdGetModuleFileNameW();
+		wstring thisexe = stdGetModuleFileName();
 		SHGetFileInfoW(thisexe.c_str(),
 					   0,
 					   &sfi, 

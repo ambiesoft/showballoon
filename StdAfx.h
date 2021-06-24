@@ -22,7 +22,8 @@
 #include <tchar.h>
 
 #include <string>
-using namespace std;
+#include <memory>
+#include <functional>
 
 #include <time.h>
 
