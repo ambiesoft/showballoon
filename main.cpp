@@ -37,26 +37,29 @@ using namespace Ambiesoft::stdosd;
 using namespace Ambiesoft;
 using namespace std;
 
-#define APPNAME L"showballoon"
-#define APPVERSION L"1.5.1"
+#define APPNAME "showballoon"
+#define APPVERSION "1.5.1"
+
+#define APPNAMEW STDOSD_WCHARLITERAL(APPNAME)
+#define APPVERSIONW STDOSD_WCHARLITERAL(APPVERSION)
 
 char a2c1(char c1)
 {
-	char ret=0;
-	if('0'<=c1 && c1<='9')
+	char ret = 0;
+	if ('0' <= c1 && c1 <= '9')
 	{
-		ret=c1-'0';
+		ret = c1 - '0';
 	}
-	else 
+	else
 	{
-		switch(c1)
+		switch (c1)
 		{
-		case 'a': case 'A': ret=0xa; break;
-		case 'b': case 'B': ret=0xb; break;
-		case 'c': case 'C': ret=0xc; break;
-		case 'd': case 'D': ret=0xd; break;
-		case 'e': case 'E': ret=0xe; break;
-		case 'f': case 'F': ret=0xf; break;
+		case 'a': case 'A': ret = 0xa; break;
+		case 'b': case 'B': ret = 0xb; break;
+		case 'c': case 'C': ret = 0xc; break;
+		case 'd': case 'D': ret = 0xd; break;
+		case 'e': case 'E': ret = 0xe; break;
+		case 'f': case 'F': ret = 0xf; break;
 		}
 	}
 	return ret;
@@ -64,48 +67,51 @@ char a2c1(char c1)
 
 char a2c(char c1, char c2)
 {
-	return a2c1(c1)*16 + a2c1(c2);
+	return a2c1(c1) * 16 + a2c1(c2);
 }
-	
+
 
 wstring argToWstring(const char* p)
 {
 	string org;
-	for(;*p;++p)
+	for (; *p; ++p)
 	{
-		if(*p=='%')
+		if (*p == '%')
 		{
-			if( *(p+1)==0 || *(p+2)==0)
+			if (*(p + 1) == 0 || *(p + 2) == 0)
 				break;
 
-			char c=a2c(*(p+1), *(p+2));
+			char c = a2c(*(p + 1), *(p + 2));
 			org += c;
-			p+=2;
+			p += 2;
 		}
-		else if(*p=='+')
+		else if (*p == '+')
 		{
-			org+=' ';
+			org += ' ';
 		}
 		else
 		{
-			org+=*p;
+			org += *p;
 		}
 	}
 	return stdRemoveDoubleQuote(toStdWstringFromUtf8(org));
-	//wstring ret;
-	//UTF8toUTF16((const LPBYTE)org.c_str(),ret);
-	//return ret;
 }
 
-
+void ShowErrorAndExit(const string& message)
+{
+	MessageBoxA(NULL,
+		message.c_str(),
+		APPNAME " v" APPVERSION,
+		MB_ICONINFORMATION);
+	exit(1);
+}
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,
-                     HINSTANCE hPrevInstance,
-                     LPTSTR     lpCmdLine,
-                     int       nCmdShow )
+	HINSTANCE hPrevInstance,
+	LPTSTR     lpCmdLine,
+	int       nCmdShow)
 {
-	// /title:"My Title" /duration:10000 "Hello World!" /balloonicon:3
-	if(__argc < 2)
+	if (__argc < 2)
 	{
 		wstring message;
 		message += NS(L"Usage:\r\n");
@@ -130,7 +136,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		message += L"Visit https://github.com/ambiesoft/showballoon for more information.";
 		MessageBoxW(NULL,
 			message.c_str(),
-			APPNAME L" v" APPVERSION,
+			APPNAMEW L" v" APPVERSIONW,
 			MB_ICONINFORMATION);
 		return 1;
 	}
@@ -138,16 +144,16 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	wstring text;
 	wstring title;
 	wstring iconexe;
-	int iconindex=0;
+	int iconindex = 0;
 	bool defaulticon = false;
-	int duration=5000;
-	int waitpid=0;
-	UINT uTrayID=GetTickCount();
-	DWORD dwBalloonIcon=NIIF_NONE;
+	int duration = 5000;
+	int waitpid = 0;
+	UINT uTrayID = GetTickCount();
+	DWORD dwBalloonIcon = NIIF_NONE;
 
 	LPCSTR pTitleOption = "/title:";
 	size_t nTitleOption = strlen(pTitleOption);
-	
+
 	LPCSTR pIconOption = "/icon:";
 	size_t nIconOption = strlen(pIconOption);
 
@@ -157,7 +163,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	LPCSTR pDefaultIconOption = "/defaulticon:";
 	size_t nDefaultIconOption = strlen(pIconIndexOption);
 
-	
+
 	LPCSTR pDurationOption = "/duration:";
 	size_t nDurationOption = strlen(pDurationOption);
 
@@ -167,51 +173,51 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	LPCSTR pBalloonIconOption = "/balloonicon:";
 	size_t nBalloonIconOption = strlen(pBalloonIconOption);
 
-
 	int argc = 0;
-	// LPSTR* argv = CCommandLineStringBase<char>::getCommandLineArg(GetCommandLineA(), &argc);
-	// stlsoft::scoped_handle<LPSTR*> myfreev(argv, CCommandLineStringBase<char>::freeCommandLineArg);
 	unique_ptr<LPSTR, function<void(LPSTR*)>> argvptr(
 		CCommandLineStringBase<char>::getCommandLineArg(GetCommandLineA(), &argc),
 		function<void(LPSTR*)>(CCommandLineStringBase<char>::freeCommandLineArg));
 	LPSTR* argv = argvptr.get();
-	for(int i=1 ; i < argc ; ++i)
+	for (int i = 1; i < argc; ++i)
 	{
-		if(0== _strnicmp(argv[i], pTitleOption, nTitleOption))
+		if (0 == _strnicmp(argv[i], pTitleOption, nTitleOption))
 		{
 			char* pS = argv[i] + nTitleOption;
-			title=argToWstring(pS);
+			title = argToWstring(pS);
 		}
-		else if(0== _strnicmp(argv[i], pIconOption, nIconOption))
+		else if (0 == _strnicmp(argv[i], pIconOption, nIconOption))
 		{
 			char* pS = argv[i] + nIconOption;
-			iconexe=argToWstring(pS);
+			iconexe = argToWstring(pS);
 		}
-		else if(0== _strnicmp(argv[i], pIconIndexOption, nIconIndexOption))
+		else if (0 == _strnicmp(argv[i], pIconIndexOption, nIconIndexOption))
 		{
 			char* pS = argv[i] + nIconIndexOption;
 			iconindex = atoi(pS);
 		}
-		else if(0== _strnicmp(argv[i], pDefaultIconOption, nDefaultIconOption))
+		else if (0 == _strnicmp(argv[i], pDefaultIconOption, nDefaultIconOption))
 		{
 			defaulticon = true;
 		}
-		else if(0== _strnicmp(argv[i], pDurationOption, nDurationOption))
+		else if (0 == _strnicmp(argv[i], pDurationOption, nDurationOption))
 		{
 			char* pS = argv[i] + nDurationOption;
 			duration = atoi(pS);
 		}
-		else if(0== _strnicmp(argv[i], pWaitpidOption, nWaitpidOption))
+		else if (0 == _strnicmp(argv[i], pWaitpidOption, nWaitpidOption))
 		{
 			char* pS = argv[i] + nWaitpidOption;
 			waitpid = atoi(pS);
 		}
-		else if(0== _strnicmp(argv[i], pBalloonIconOption, nBalloonIconOption))
+		else if (0 == _strnicmp(argv[i], pBalloonIconOption, nBalloonIconOption))
 		{
 			char* pS = argv[i] + nBalloonIconOption;
 			dwBalloonIcon = atoi(pS);
 		}
-
+		else if (argv[i][0] == L'/')
+		{
+			ShowErrorAndExit(string() + "Unknown Option:" + "\r\n" + argv[i]);
+		}
 
 		else
 		{
@@ -219,51 +225,32 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		}
 	}
 
-	if(waitpid!=0)
+	if (waitpid != 0)
 	{
 		HANDLE ph = OpenProcess(SYNCHRONIZE, FALSE, waitpid);
-		if(ph)
-			WaitForSingleObject(ph,INFINITE);
+		if (ph)
+			WaitForSingleObject(ph, INFINITE);
 	}
 
 
 	HICON hIcon = NULL;
-	if(!iconexe.empty())
+	if (!iconexe.empty())
 	{
-		
-//		SHFILEINFOW sfi={0};
-//		SHGetFileInfoW(iconexe.c_str(),
-//					   0,
-//					   &sfi, 
-//					   sizeof(SHFILEINFO), 
-//					   // SHGFI_SYSICONINDEX|
-//					   SHGFI_ICON|
-//					   SHGFI_SMALLICON);
-//		hIcon = sfi.hIcon;
-
-
-//		ExtractIconExW(
-//			iconexe.c_str(),
-//			iconindex,
-//			NULL,
-//			&hIcon,
-//			1);
-
 		hIcon = ExtractIconW(hInstance,
 			iconexe.c_str(),
 			iconindex);
 	}
-	else if(defaulticon)
+	else if (defaulticon)
 	{
-		SHFILEINFOW sfi={0};
+		SHFILEINFOW sfi = { 0 };
 		wstring thisexe = stdGetModuleFileName();
 		SHGetFileInfoW(thisexe.c_str(),
-					   0,
-					   &sfi, 
-					   sizeof(SHFILEINFO), 
-					   // SHGFI_SYSICONINDEX|
-					   SHGFI_ICON|
-					   SHGFI_SMALLICON);
+			0,
+			&sfi,
+			sizeof(SHFILEINFO),
+			// SHGFI_SYSICONINDEX|
+			SHGFI_ICON |
+			SHGFI_SMALLICON);
 
 		hIcon = sfi.hIcon;
 	}
@@ -273,12 +260,12 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		title,
 		text,
 		hIcon,
-		duration, 
+		duration,
 		uTrayID,
 		FALSE,
 		dwBalloonIcon);
-	
-	if(hIcon)
+
+	if (hIcon)
 		DestroyIcon(hIcon);
 	return 0;
 }

@@ -86,5 +86,8 @@ int main()
 		_T("%E8%8B%B1%E8%AF%AD%EF%BC%88English%EF%BC%8C%E8%81%86%E8%81%BDi%2F%CB%88%C9%AA%C5%8B%C9%A1l%C9%AA%CA%83%2F%EF%BC%89%E6%98%AF%E4%B8%80%E7%A7%8D%E8%A5%BF%E6%97%A5%E8%80%B3%E6%9B%BC%E8%AF%AD%E8%A8%80")
 	);
 	testit(command.c_str());
+
+	command = L"/ttt:aaa This is an error";
+	testit(command.c_str());
 	return 0;
 }
